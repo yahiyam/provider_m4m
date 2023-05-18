@@ -17,3 +17,30 @@ class DarkModeState extends ChangeNotifier {
     notifyListeners();
   }
 }
+
+class ViewModeState extends ChangeNotifier {
+  bool _isGridMode = false;
+  bool get isGridMode => _isGridMode;
+  toggleViewMode() {
+    _isGridMode = !_isGridMode;
+    notifyListeners();
+  }
+
+  Icon viewIcon() {
+    notifyListeners();
+    return Icon(
+      _isGridMode ? Icons.list : Icons.grid_view,
+    );
+  }
+
+  Text viewLabel() {
+    notifyListeners();
+    return _isGridMode
+        ? const Text(
+            'List View',
+          )
+        : const Text(
+            'Grid View',
+          );
+  }
+}

@@ -40,7 +40,7 @@ Widget buildMenuItems({
             Navigator.pop(context);
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const MostPlayed(),
+                builder: (context) => MostPlayed(),
               ),
             );
           },

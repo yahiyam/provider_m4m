@@ -8,7 +8,7 @@ import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'db_functions.dart';
 import '../models/songdb.dart';
 
-class PlaylistSong {
+class PlaylistSong extends ChangeNotifier{
   static final Box<List> likedSongBox = getPlaylistBox();
   static final Box<Songs> songBox = getSongBox();
 
@@ -46,14 +46,17 @@ class PlaylistSong {
         dismissType: DismissType.onSwipe,
       );
     }
+    
   }
 
   static IconData isLiked({required String id}) {
     final List<Songs> storageSongs = songBox.values.toList().cast();
     List<Songs> likedList = likedSongBox.get('LikedSongs')!.toList().cast();
     Songs liked = storageSongs.firstWhere((song) => song.songPath.contains(id));
+    
     return likedList.where((song) => song.songPath == liked.songPath).isEmpty
         ? Icons.favorite_border
         : Icons.favorite;
+
   }
 }

@@ -4,6 +4,7 @@ import '../models/songdb.dart';
 
 Box<Songs> getSongBox() {
   return Hive.box<Songs>('Songs');
+  
 }
 
 Box<List> getPlaylistBox() {

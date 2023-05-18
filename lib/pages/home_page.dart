@@ -1,32 +1,53 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:m4m_app/pages/search_page.dart';
 import 'package:m4m_app/pages/tabs/all_songs.dart';
 import 'package:m4m_app/pages/tabs/liked_songs_screen.dart';
 import 'package:m4m_app/pages/tabs/recently_played.dart';
+import 'package:m4m_app/provider/dark_mode.dart';
 import 'package:provider/provider.dart';
-
 import '../dataBase/models/songdb.dart';
-import '../provider/dark_mode.dart';
 import '../widgets/menu_items.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomePage> {
+  final audioPlayer = AssetsAudioPlayer.withId('0');
+
+  List<Songs> audioList = [];
+  Box<Songs> songBox = Hive.box<Songs>('Songs');
+  List<Songs> foundSongs = [];
+
+  @override
+  void initState() {
+    final List<int> keys = songBox.keys.toList().cast<int>();
+    for (var key in keys) {
+      audioList.add(songBox.get(key)!);
+    }
+    foundSongs = audioList;
+    super.initState();
+  }
+
+  // bool _isGridMode = false;
+
+  // void toggleViewMode() {
+  //   setState(() {
+  //     _isGridMode = !_isGridMode;
+  //     Navigator.pop(context);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final audioPlayer = AssetsAudioPlayer.withId('0');
-    final List<Songs> audioList = [];
-    final List<Songs> foundSongs = audioList;
-
-    final darkModeState = Provider.of<DarkModeState>(context);
-    final isGridMode = darkModeState.isDarkMode;
-
-    void toggleViewMode() {
-      darkModeState.toggleDarkMode();
-      Navigator.pop(context);
-    }
-
+    final viewMode = Provider.of<ViewModeState>(context);
+    final box = Hive.box('isDarkMode');
+    final darkMode = box.get('isDarkMode', defaultValue: false);
     return Scaffold(
       drawer: Drawer(
         child: SafeArea(
@@ -48,11 +69,13 @@ class HomePage extends StatelessWidget {
                             icon: const Icon(Icons.clear),
                           ),
                           IconButton(
-                            onPressed: darkModeState.toggleDarkMode,
+                            onPressed: () {
+                              setState(() {
+                                box.put('isDarkMode', !darkMode);
+                              });
+                            },
                             icon: Icon(
-                              darkModeState.isDarkMode
-                                  ? Icons.light_mode
-                                  : Icons.dark_mode,
+                              darkMode ? Icons.light_mode : Icons.dark_mode,
                             ),
                           ),
                         ],
@@ -87,22 +110,26 @@ class HomePage extends StatelessWidget {
                   },
                   icon: const Icon(Icons.search),
                 ),
-                PopupMenuButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      child: TextButton.icon(
-                        onPressed: toggleViewMode,
-                        icon: Icon(
-                          isGridMode ? Icons.list : Icons.grid_view,
+                // IconButton(
+                //   onPressed: viewMode.toggleViewMode(),
+                //   icon: viewMode.viewIcon(),
+                // ),
+                Consumer<ViewModeState>(
+                  builder: (context, viewMode, _) {
+                    return PopupMenuButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          child: TextButton.icon(
+                            onPressed: viewMode.toggleViewMode(),
+                            icon: viewMode.viewIcon(),
+                            label: viewMode.viewLabel(),
+                          ),
                         ),
-                        label: isGridMode
-                            ? const Text('List View')
-                            : const Text('Grid View'),
-                      ),
-                    ),
-                  ],
+                      ],
+                    );
+                  },
                 ),
               ],
               floating: true,
@@ -124,14 +151,32 @@ class HomePage extends StatelessWidget {
             children: [
               AllSongs(
                 foundSongs: foundSongs,
-                isGridMode: isGridMode,
+                isGridMode: viewMode.isGridMode,
               ),
-              FavoriteSongsScreen(isGridMode: isGridMode),
-              RecentlyPlayed(isGridMode: isGridMode),
+              FavoriteSongsScreen(isGridMode: viewMode.isGridMode),
+              RecentlyPlayed(isGridMode: viewMode.isGridMode),
             ],
           ),
         ),
       ),
     );
   }
+
+  // void rateMyAppAlert() {
+  //   if (widget.rateMyApp.shouldOpenDialog) {
+  //     widget.rateMyApp.showRateDialog(
+  //       context,
+  //       message: 'give five star do nothing',
+  //       noButton: 'NEVER',
+  //       laterButton: 'LATER',
+  //       dialogStyle: const DialogStyle(
+  //           titleStyle: TextStyle(
+  //         color: Colors.orange,
+  //       )),
+  //       onDismissed: () => widget.rateMyApp.callEvent(
+  //         RateMyAppEventType.laterButtonPressed,
+  //       ),
+  //     );
+  //   }
+  // }
 }

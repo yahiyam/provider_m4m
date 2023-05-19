@@ -8,12 +8,11 @@ import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'db_functions.dart';
 import '../models/songdb.dart';
 
-class PlaylistSong extends ChangeNotifier{
-  static final Box<List> likedSongBox = getPlaylistBox();
-  static final Box<Songs> songBox = getSongBox();
+class PlaylistSong extends ChangeNotifier {
+  final Box<List> likedSongBox = getPlaylistBox();
+  final Box<Songs> songBox = getSongBox();
 
-  static addSongToLiked(
-      {required BuildContext context, required String id}) async {
+  addSongToLiked({required BuildContext context, required String id}) async {
     final List<Songs> songsList = songBox.values.toList().cast<Songs>();
     final List<Songs> likedList =
         likedSongBox.get('LikedSongs')!.toList().cast<Songs>();
@@ -46,17 +45,16 @@ class PlaylistSong extends ChangeNotifier{
         dismissType: DismissType.onSwipe,
       );
     }
-    
+    notifyListeners();
   }
 
-  static IconData isLiked({required String id}) {
+  IconData isLiked({required String id}) {
     final List<Songs> storageSongs = songBox.values.toList().cast();
     List<Songs> likedList = likedSongBox.get('LikedSongs')!.toList().cast();
     Songs liked = storageSongs.firstWhere((song) => song.songPath.contains(id));
-    
+    notifyListeners();
     return likedList.where((song) => song.songPath == liked.songPath).isEmpty
         ? Icons.favorite_border
         : Icons.favorite;
-
   }
 }

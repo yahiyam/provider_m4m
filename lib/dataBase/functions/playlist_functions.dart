@@ -8,8 +8,8 @@ import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'db_functions.dart';
 import '../models/songdb.dart';
 
-class PlaylistFunctions {
-  static playlistCreateAlertBox({required context}) {
+class PlaylistFunctions extends ChangeNotifier {
+  playlistCreateAlertBox({required context}) {
     final TextEditingController textEditingController = TextEditingController();
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     Box<List> playlistBox = getPlaylistBox();
@@ -34,6 +34,7 @@ class PlaylistFunctions {
       }
     }
 
+    notifyListeners();
     return showDialog(
       context: context,
       builder: (context) {
@@ -89,8 +90,7 @@ class PlaylistFunctions {
     );
   }
 
-  static playlistDeleteFunction(
-      {required context, required String playlistName}) {
+  playlistDeleteFunction({required context, required String playlistName}) {
     Box<List> playlistBox = getPlaylistBox();
     Future<void> deletePlaylist({required String playlistName}) async {
       playlistBox.delete(playlistName);
@@ -105,6 +105,7 @@ class PlaylistFunctions {
       );
     }
 
+    notifyListeners();
     String messege = 'Are you sure you want to delete $playlistName playlist?';
     String bold = playlistName;
     return showDialog(
@@ -154,7 +155,7 @@ class PlaylistFunctions {
     );
   }
 
-  static playlistEditFunction({
+  playlistEditFunction({
     required BuildContext context,
     required List<Songs> songs,
     required String playlistName,
@@ -179,6 +180,7 @@ class PlaylistFunctions {
       );
     }
 
+    notifyListeners();
     return showDialog(
       context: context,
       builder: (context) {

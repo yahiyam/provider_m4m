@@ -33,7 +33,7 @@ class _AudioTileViewState extends State<AudioTileView> {
         return ListTile(
           contentPadding: const EdgeInsets.only(left: 15),
           onTap: () async {
-            RecentSongs.addSongtoRecent(
+            RecentSongs().addSongtoRecent(
               context: context,
               id: widget.audiosList[index].songPath,
             );
@@ -70,16 +70,16 @@ class _AudioTileViewState extends State<AudioTileView> {
             children: [
               IconButton(
                 onPressed: () {
-                  PlaylistSong.addSongToLiked(
+                  PlaylistSong().addSongToLiked(
                     context: context,
                     id: widget.audiosList[index].songPath,
                   );
                   setState(() {
-                    PlaylistSong.isLiked(id: widget.audiosList[index].songPath);
+                    PlaylistSong().isLiked(id: widget.audiosList[index].songPath);
                   });
                 },
                 icon: Icon(
-                  PlaylistSong.isLiked(id: widget.audiosList[index].songPath),
+                  PlaylistSong().isLiked(id: widget.audiosList[index].songPath),
                   color: Colors.pink,
                 ),
               ),
@@ -151,17 +151,17 @@ class _AudioGridViewState extends State<AudioGridView> {
               children: [
                 IconButton(
                   onPressed: () {
-                    PlaylistSong.addSongToLiked(
+                    PlaylistSong().addSongToLiked(
                       context: context,
                       id: widget.audiosList[index].songPath,
                     );
                     setState(() {
-                      PlaylistSong.isLiked(
+                      PlaylistSong().isLiked(
                           id: widget.audiosList[index].songPath);
                     });
                   },
                   icon: Icon(
-                    PlaylistSong.isLiked(id: widget.audiosList[index].songPath),
+                    PlaylistSong().isLiked(id: widget.audiosList[index].songPath),
                     color: Colors.pink,
                   ),
                 ),
@@ -209,7 +209,7 @@ class _AudioGridViewState extends State<AudioGridView> {
             ),
             child: GestureDetector(
               onTap: () async {
-                RecentSongs.addSongtoRecent(
+                RecentSongs().addSongtoRecent(
                   context: context,
                   id: widget.audiosList[index].songPath,
                 );

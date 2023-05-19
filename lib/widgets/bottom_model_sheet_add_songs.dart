@@ -33,14 +33,14 @@ class BottomModelSheet {
                 ),
                 trailing: IconButton(
                   onPressed: () {
-                    SongsToPlaylist.addSongToPlaylist(
+                    SongsToPlaylist().addSongToPlaylist(
                       context: context,
                       id: audioList[index].songPath,
                       playlistName: playlistName,
                     );
                     setState(
                       () {
-                        SongsToPlaylist.isInPlaylist(
+                        SongsToPlaylist().isInPlaylist(
                           id: audioList[index].songPath,
                           playlistName: playlistName,
                         );
@@ -48,7 +48,7 @@ class BottomModelSheet {
                     );
                   },
                   icon: Icon(
-                    SongsToPlaylist.isInPlaylist(
+                    SongsToPlaylist().isInPlaylist(
                       id: audioList[index].songPath,
                       playlistName: playlistName,
                     ),

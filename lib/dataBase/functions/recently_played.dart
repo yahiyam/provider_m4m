@@ -5,12 +5,11 @@ import '../models/songdb.dart';
 import 'db_functions.dart';
 import 'most_played.dart';
 
-class RecentSongs {
-  static final Box<List> playlistBox = getPlaylistBox();
-  static final Box<Songs> songBox = getSongBox();
+class RecentSongs extends ChangeNotifier {
+  final Box<List> playlistBox = getPlaylistBox();
+  final Box<Songs> songBox = getSongBox();
 
-  static addSongtoRecent(
-      {required BuildContext context, required String id}) async {
+  addSongtoRecent({required BuildContext context, required String id}) async {
     final List<Songs> allSongs = songBox.values.toList().cast<Songs>();
     final List<Songs> recentSongList =
         playlistBox.get('RecentSongs')!.toList().cast<Songs>();
@@ -19,7 +18,7 @@ class RecentSongs {
     int count = recentSong.flag;
     recentSong.flag = count + 1;
 
-    MostPlayedSongs.addSongtoMostPlayed(context: context, id: id);
+    MostPlayedSongs().addSongtoMostPlayed(id: id);
 
     if (recentSongList.length > 10) {
       recentSongList.removeLast();
@@ -36,5 +35,6 @@ class RecentSongs {
       recentSongList.add(recentSong);
       await playlistBox.put('RecentSongs', recentSongList);
     }
+    notifyListeners();
   }
 }

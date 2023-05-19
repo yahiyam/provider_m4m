@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import '../models/songdb.dart';
 import 'db_functions.dart';
 
-class SongAccess {
+class SongAccess extends ChangeNotifier {
   final OnAudioQuery audioQuery = OnAudioQuery();
   final List<SongModel> sortedSongs = [];
   final Box<Songs> songBox = getSongBox();
@@ -36,23 +37,27 @@ class SongAccess {
     await accessTheKeysForLikedSongs();
     await accessTheKeysForRecentSongs();
     await accessTheKeysForMostPlayedSongs();
+    notifyListeners();
   }
 
   Future<void> accessTheKeysForLikedSongs() async {
     if (!playlistbox.keys.contains('LikedSongs')) {
       await playlistbox.put('LikedSongs', likedSongs);
     }
+    notifyListeners();
   }
 
   Future<void> accessTheKeysForRecentSongs() async {
     if (!playlistbox.keys.contains('RecentSongs')) {
       await playlistbox.put('RecentSongs', recentSongs);
     }
+    notifyListeners();
   }
 
   Future<void> accessTheKeysForMostPlayedSongs() async {
     if (!playlistbox.keys.contains('MostPlayed')) {
       await playlistbox.put('MostPlayed', mostPlayed);
     }
+    notifyListeners();
   }
 }

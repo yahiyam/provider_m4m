@@ -4,11 +4,10 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../models/songdb.dart';
 import 'db_functions.dart';
 
-class MostPlayedSongs {
-  static final Box<List> playlistBox = getPlaylistBox();
-  static final Box<Songs> songBox = getSongBox();
-  static addSongtoMostPlayed(
-      {required BuildContext context, required String id}) async {
+class MostPlayedSongs extends ChangeNotifier {
+  final Box<List> playlistBox = getPlaylistBox();
+  final Box<Songs> songBox = getSongBox();
+  addSongtoMostPlayed({required String id}) async {
     final List<Songs> allSongs = songBox.values.toList().cast<Songs>();
     final List<Songs> mostPlayedSongList =
         playlistBox.get('MostPlayed')!.toList().cast<Songs>();
@@ -31,5 +30,6 @@ class MostPlayedSongs {
         await playlistBox.put('MostPlayed', mostPlayedSongList);
       }
     }
+    notifyListeners();
   }
 }

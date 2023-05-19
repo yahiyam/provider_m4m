@@ -100,7 +100,7 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
                                   child: TextButton.icon(
                                     onPressed: () {
                                       Navigator.pop(context);
-                                      PlaylistFunctions.playlistDeleteFunction(
+                                      PlaylistFunctions().playlistDeleteFunction(
                                         context: context,
                                         playlistName: playlistName,
                                       );
@@ -116,7 +116,7 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
                                   child: TextButton.icon(
                                     onPressed: () {
                                       Navigator.pop(context);
-                                      PlaylistFunctions.playlistEditFunction(
+                                      PlaylistFunctions().playlistEditFunction(
                                         context: context,
                                         songs: playlistSongList,
                                         playlistName: playlistName,
@@ -141,7 +141,7 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          PlaylistFunctions.playlistCreateAlertBox(context: context);
+          PlaylistFunctions().playlistCreateAlertBox(context: context);
         },
         label: Text('add a playlist'.toUpperCase()),
         icon: const Icon(Icons.add),

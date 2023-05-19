@@ -221,13 +221,13 @@ class _SongScreenState extends State<SongScreen> {
                     IconButton(
                         onPressed: () {
                           setState(() {
-                            PlaylistSong.addSongToLiked(
+                            PlaylistSong().addSongToLiked(
                                 context: context, id: musicAuido.metas.id!);
-                            PlaylistSong.isLiked(id: musicAuido.metas.id!);
+                            PlaylistSong().isLiked(id: musicAuido.metas.id!);
                           });
                         },
                         icon:
-                            Icon(PlaylistSong.isLiked(id: musicAuido.metas.id!),
+                            Icon(PlaylistSong().isLiked(id: musicAuido.metas.id!),
                                 color: const Color(
                                   0xFFD933C3,
                                 ),
